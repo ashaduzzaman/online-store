@@ -43,6 +43,7 @@
                     :headers="headers"
                     :items="orders"
                     :search="search"
+                    class="elevation-1"
                     >
                     <template v-slot:item.quantity="{ item }">
                         <v-chip color="primary" dark>{{ item.quantity }}</v-chip>

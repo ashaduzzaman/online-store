@@ -88,7 +88,7 @@
     import Products from '../components/admin/Products'
     import Delivered from '../components/admin/Delivered'
     import Orders from '../components/admin/Orders'
-    import Navbar from "../components/AdminNav";
+    import Category from '../components/admin/Category'
 
     
     export default {
@@ -106,6 +106,7 @@
                 { title: 'Dashboard', icon: 'mdi-view-dashboard', component: 'main' },
                 { title: 'Orders', icon: 'mdi-image', component: 'orders' },
                 { title: 'Delivered Orders', icon: 'mdi-image', component: 'delivered' },
+                { title: 'Category', icon: 'mdi-image', component: 'category' },
                 { title: 'Products', icon: 'mdi-help-box', component: 'products' },
                 { title: 'Users', icon: 'mdi-help-box', component: 'users' },
                 ],
@@ -113,7 +114,7 @@
             }
         },
         components : {
-            Main, Users, Products, Orders, Delivered
+            Main, Users, Products, Orders, Delivered, Category
         },
         mounted() {
             this.setDefaults()
@@ -138,6 +139,10 @@
                     case "delivered":
                         this.activeComponent = Delivered
                         this.$router.push({name : 'admin-pages', params : {page: 'delivered'}})
+                        break;
+                    case "category":
+                        this.activeComponent = Category
+                        this.$router.push({name : 'admin-pages', params : {page: 'category'}})
                         break;
                     case "products":
                         this.activeComponent = Products

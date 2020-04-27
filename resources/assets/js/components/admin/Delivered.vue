@@ -1,17 +1,22 @@
 <template>
     <div class="app">
 
-        <v-container>
+        <v-toolbar flat color="white" class="mt-6">
+            <v-toolbar-title class="grey--text">Delivered Orders</v-toolbar-title>
+            <v-divider class="mx-2" inset vertical></v-divider>
+        </v-toolbar>
+        <v-container fluid>
             <v-row>
                 <v-col>
                     <v-row>
-                        <v-col md="6"></v-col>
-                        <v-col md="6">
+                        <v-col md="8"></v-col>
+                        <v-col md="4">
                             <v-text-field
                             v-model="search"
                             append-icon="mdi-magnify"
                             label="Search"
                             single-line
+                            solo
                             hide-details
                             ></v-text-field>
                         </v-col>
@@ -20,6 +25,7 @@
                     :headers="headers"
                     :items="orders"
                     :search="search"
+                    class="elevation-1"
                     >
                     <!-- <template v-slot:item.quantity="{ item }">
                         <v-chip color="primary" dark>{{ item.quantity }}</v-chip>

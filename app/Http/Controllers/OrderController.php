@@ -10,7 +10,6 @@ class OrderController extends Controller
 {
     public function index()
     {
-        logger('index');
         return response()->json(Order::where('is_delivered', 0)->with(['product'])->get(),200);
     }
         
@@ -72,7 +71,6 @@ class OrderController extends Controller
     public function deliveredOrders()
     {
         $deliveredOrders = Order::where('is_delivered', 1)->with(['product'])->get();
-        logger($deliveredOrders);
         return response()->json($deliveredOrders, 200);
     }
 }

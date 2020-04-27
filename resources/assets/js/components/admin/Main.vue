@@ -1,7 +1,7 @@
 <template class="ma-0 pa-0" style="padding: 0px;">
 	<div>
         <v-toolbar flat color="white" class="mt-6">
-            <v-toolbar-title class="grey--text">Medicine List</v-toolbar-title>
+            <v-toolbar-title class="grey--text">Dashboard</v-toolbar-title>
             <v-divider class="mx-2" inset vertical></v-divider>
         </v-toolbar>
 
