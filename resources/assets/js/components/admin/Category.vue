@@ -113,7 +113,6 @@
                 },
                 { text: 'Action', value: 'action' },
                 ],
-                items: ['Foo', 'Bar', 'Fizz', 'Buzz'],
             }
         },
         beforeMount(){
@@ -213,7 +212,7 @@
     }
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
     
     #modal {
   font-family: "Ubuntu", sans-serif;

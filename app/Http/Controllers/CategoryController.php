@@ -82,8 +82,6 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        logger('update');
-        logger($request);
         $category = Category::where('id', $request->id)
                             ->update(
                                 [
