@@ -58292,17 +58292,34 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
         return {
-            cards: [{ title: 'Pre-fab homes', src: '/images/Baby.png', flex: 6 }, { title: 'Favorite road trips', src: '/images/Health-Hygiene.png', flex: 6 }, { title: 'Best airlines', src: '/images/Chocolates-Product-Category-10-1.png', flex: 6 }, { title: 'Best airlines dhaka', src: '/images/Electronics-Product-Category.png', flex: 6 }]
+            categories: [],
+            cards: [{ title: 'Baby Food', src: '/images/Baby.png', flex: 6 }, { title: 'Health', src: '/images/Health-Hygiene.png', flex: 6 }, { title: 'Chocolate', src: '/images/Chocolates-Product-Category-10-1.png', flex: 6 }, { title: 'Electronics', src: '/images/Electronics-Product-Category.png', flex: 6 }]
         };
     },
+    beforeMount: function beforeMount() {
+        var _this = this;
+
+        axios.get('/api/').then(function (response) {
+            console.log(response.data);
+            _this.categories = response.data;
+        }).catch(function (error) {
+            console.error(error);
+        });
+    },
+
     methods: {
         selectedCategory: function selectedCategory(item) {
             console.log(item);
+            axios.get('/api/products/category=' + item.id).then(function (response) {
+                // console.log(response.data)
+                // this.categories = response.data
+            }).catch(function (error) {
+                console.error(error);
+            });
         }
     }
 
@@ -58340,11 +58357,7 @@ var render = function() {
               _vm._l(_vm.cards, function(card) {
                 return _c(
                   "v-col",
-                  {
-                    key: card.title,
-                    class: "d-flex justify-center mb-3",
-                    attrs: { cols: card.flex }
-                  },
+                  { key: card.name, class: "d-flex justify-center mb-3" },
                   [
                     _c(
                       "v-card",
@@ -58367,7 +58380,7 @@ var render = function() {
                           { staticClass: "justify-center" },
                           [
                             _c("p", { staticStyle: { "font-size": "20px" } }, [
-                              _vm._v("Baby Foods")
+                              _vm._v(_vm._s(card.title))
                             ])
                           ]
                         )
@@ -60930,7 +60943,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
                 align: 'start',
                 sortable: false,
                 value: 'name'
-            }, { text: 'Category', value: 'category' }, { text: 'Stock', value: 'units' }, { text: 'Price', value: 'price' }, { text: 'Description', value: 'description' }, { text: 'Action', value: 'action' }],
+            }, { text: 'Category', value: 'category.name' }, { text: 'Stock', value: 'units' }, { text: 'Price', value: 'price' }, { text: 'Description', value: 'description' }, { text: 'Action', value: 'action' }],
             items: ['Foo', 'Bar', 'Fizz', 'Buzz']
         };
     },

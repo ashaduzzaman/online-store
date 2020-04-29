@@ -9,7 +9,7 @@ class ProductController extends Controller
 {
     public function index()
     {
-        return response()->json(Product::all(),200);
+        return response()->json(Product::with('category')->get(),200);
     }
     
     public function store(Request $request)
@@ -30,9 +30,12 @@ class ProductController extends Controller
         ]);
     }
     
-    public function show(Product $product)
+    public function show($id)
     {
-        return response()->json($product,200); 
+        logger($id);
+        $products = Product::where('category_id', $id)->get();
+        logger($products);
+        // return response()->json($product,200); 
     }
 
     public function uploadFile(Request $request)

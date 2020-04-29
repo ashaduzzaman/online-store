@@ -168,7 +168,7 @@
                     sortable: false,
                     value: 'name',
                 },
-                { text: 'Category', value: 'category' },
+                { text: 'Category', value: 'category.name' },
                 { text: 'Stock', value: 'units' },
                 { text: 'Price', value: 'price' },
                 { text: 'Description', value: 'description' },

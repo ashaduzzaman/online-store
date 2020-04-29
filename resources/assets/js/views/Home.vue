@@ -19,8 +19,7 @@
             <v-row dense>
                 <v-col
                 v-for="card in cards"
-                :key="card.title"
-                :cols="card.flex"
+                :key="card.name"
                 :class="`d-flex justify-center mb-3`"
                 >
                     <v-card 
@@ -37,7 +36,7 @@
                         </v-img>
                         <v-card-actions class="justify-center">
                         <!-- <v-spacer></v-spacer> -->
-                        <p style="font-size:20px;">Baby Foods</p>
+                        <p style="font-size:20px;">{{card.title}}</p>
                         </v-card-actions>
                     </v-card>
                 </v-col>
@@ -51,16 +50,35 @@
 <script>
 export default {
     data: () => ({
+        categories: [],
       cards: [
-        { title: 'Pre-fab homes', src: '/images/Baby.png', flex: 6 },
-        { title: 'Favorite road trips', src: '/images/Health-Hygiene.png', flex: 6 },
-        { title: 'Best airlines', src: '/images/Chocolates-Product-Category-10-1.png', flex: 6 },
-        { title: 'Best airlines dhaka', src: '/images/Electronics-Product-Category.png', flex: 6 },
+        { title: 'Baby Food', src: '/images/Baby.png', flex: 6 },
+        { title: 'Health', src: '/images/Health-Hygiene.png', flex: 6 },
+        { title: 'Chocolate', src: '/images/Chocolates-Product-Category-10-1.png', flex: 6 },
+        { title: 'Electronics', src: '/images/Electronics-Product-Category.png', flex: 6 },
       ],
     }),
+    beforeMount(){
+        axios.get('/api/')
+            .then(response => {
+                console.log(response.data)
+                this.categories = response.data
+            })
+            .catch(error => {
+                console.error(error);
+            })
+    },
     methods:{
         selectedCategory(item){
             console.log(item);
+        axios.get('/api/products/category='+ item.id)
+            .then(response => {
+                // console.log(response.data)
+                // this.categories = response.data
+            })
+            .catch(error => {
+                console.error(error);
+            })
         }
     }
     
