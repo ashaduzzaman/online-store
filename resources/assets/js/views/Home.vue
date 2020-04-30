@@ -1,12 +1,5 @@
 <template>
     <v-app>
-        <!-- <v-card 
-        class="mx-auto mt-0 pa-4"
-        max-width="500"
-        color="rgb(255,227,63)"
-        flat
-        tile
-        > -->
     <div class="main">     
         <v-container fluid>
             <v-text-field
@@ -18,25 +11,26 @@
 
             <v-row dense>
                 <v-col
-                v-for="card in cards"
+                v-for="card in categories"
                 :key="card.name"
                 :class="`d-flex justify-center mb-3`"
+                cols="6"
                 >
                     <v-card 
                     width="200px" 
-                    class="mx-auto" 
+                    class="mx-auto"
                     @click="selectedCategory(card)"
                     >
                         <v-img
-                        :src="card.src"
+                        :src="card.imgUrl"
                         class=""
                         height="180px"
                         >
-                        <!-- <v-card-title v-text="card.title"></v-card-title> -->
                         </v-img>
+                        <!-- <img height="180px" v-bind:src="card.imgUrl" /> -->
                         <v-card-actions class="justify-center">
                         <!-- <v-spacer></v-spacer> -->
-                        <p style="font-size:20px;">{{card.title}}</p>
+                        <p style="font-size:20px;">{{card.name}}</p>
                         </v-card-actions>
                     </v-card>
                 </v-col>
@@ -51,17 +45,11 @@
 export default {
     data: () => ({
         categories: [],
-      cards: [
-        { title: 'Baby Food', src: '/images/Baby.png', flex: 6 },
-        { title: 'Health', src: '/images/Health-Hygiene.png', flex: 6 },
-        { title: 'Chocolate', src: '/images/Chocolates-Product-Category-10-1.png', flex: 6 },
-        { title: 'Electronics', src: '/images/Electronics-Product-Category.png', flex: 6 },
-      ],
     }),
     beforeMount(){
         axios.get('/api/')
             .then(response => {
-                console.log(response.data)
+                console.log(response.data[0].imgUrl)
                 this.categories = response.data
             })
             .catch(error => {
@@ -70,15 +58,7 @@ export default {
     },
     methods:{
         selectedCategory(item){
-            console.log(item);
-        axios.get('/api/products/category='+ item.id)
-            .then(response => {
-                // console.log(response.data)
-                // this.categories = response.data
-            })
-            .catch(error => {
-                console.error(error);
-            })
+            this.$router.push({ path: "/products/category="+item.id })
         }
     }
     
@@ -90,7 +70,7 @@ export default {
     
     .main{
         width: 40%;
-        background-color: rgb(255,227,63);
+        background-color: rgb(26,85,156);
         // text-align: center !important;
          margin-right: auto !important;
          margin-left: auto !important;
@@ -107,5 +87,3 @@ export default {
         }
     }
 </style>>
-    
-</style>

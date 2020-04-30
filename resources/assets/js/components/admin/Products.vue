@@ -78,6 +78,27 @@
                             ></v-textarea>
                         </v-col>
                         </v-row>
+                        <v-row>
+                            <v-col cols="12" class="py-0">
+                                <!-- <v-file-input v-model="editedItem.image" @change="onFilePicked" show-size label="File input"></v-file-input> -->
+                                <label>
+                                    <v-btn raised @click="onPickFile">Upload Image</v-btn>
+                                    <input
+                                    type="file"
+                                    id="file"
+                                    ref="fileInput"
+                                    style="display:none"
+                                    accept="image/*"
+                                    @change="onFilePicked"
+                                    />
+                                </label>
+                            </v-col>
+                            <!-- <v-col cols="1"></v-col> -->
+                            <v-col cols="12" v-if="imageUrl">
+                                <img :src="imageUrl" height="150" width="150" />
+                            </v-col>
+                        </v-row>
+                        </v-row>
                     </v-container>
                     <!-- <small>*indicates required field</small> -->
                     </v-card-text>
@@ -148,15 +169,19 @@
                     units: null,
                     price: null,
                     category_id: null,
-                    description: ""
+                    description: "",
+                    image: ""
                 },
                 defaultItem: {
                     name: "",
                     units: null,
                     price: null,
                     category_id: null,
-                    description: ""
+                    description: "",
+                    image: ""
                 },
+                imageUrl: "",
+                image: null,
                 addingProduct : null,
                 dialog: false,
                 editedIndex: -1,
@@ -203,6 +228,42 @@
                 .catch(error => {
                     console.error(error);
                 })
+            },
+            onPickFile() {
+                this.$refs.fileInput.click();
+            },
+            onFilePicked(event) {
+            const files = event.target.files;
+            let filename = files[0].name;
+            if (filename.lastIndexOf(".") <= 0) {
+                return alert("Please add a valid file!");
+            }
+            var fileReader = new FileReader();
+
+            fileReader.readAsDataURL(event.target.files[0]);
+            //Initiate the JavaScript Image object.
+            var image = new Image();
+
+            //Set the Base64 string return from FileReader as source.
+            image.src = event.target.result;
+
+            //Declare Variables
+            var height = 0;
+            var width = 0;
+
+            //Validate the File Height and Width.
+            image.onload = function() {
+                height = this.height;
+                width = this.width;
+            };
+            // if (height >= 100 || width >= 300) {
+            //     return alert("Height and Width must not exceed 100*300 px");
+            // } else {
+                fileReader.onload = event => {
+                this.editedItem.image = event.target.result;
+                this.imageUrl = fileReader.result;
+                };
+            // }
             },
             newProduct(){
                 this.addingProduct = {

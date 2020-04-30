@@ -14,14 +14,41 @@ class ProductController extends Controller
     
     public function store(Request $request)
     {
-        $product = Product::create([
-            'name' => $request->name,
-            'category_id' => $request->category_id,
-            'description' => $request->description,
-            'units' => $request->units,
-            'price' => $request->price,
-            'image' => $request->image
+        $validatedData = $request->validate([
+            'name' => 'required|max:190',
+            'category_id' => 'required',
+            'units' => 'required',
+            'price' => 'required',
+            'image' => 'required',
         ]);
+            $data = [];
+
+            if ($request->filled('image')) {
+                logger('has');
+                logger($request->all());
+                $exploded = explode(',', $request->image);
+                $decoded = base64_decode($exploded[1]);
+
+                if(str_contains($exploded[0], 'jpeg'))
+                    $extension = 'jpg';
+                else
+                    $extension = 'png';
+
+                $fileName = str_random().'.'.$extension;
+                
+                $path = public_path().'/images/'.$fileName;
+
+                file_put_contents($path, $decoded);
+
+                $data['image'] = $fileName;
+            }
+
+            $data['name'] = $request->name;
+            $data['category_id'] = $request->category_id;
+            $data['description'] = $request->description;
+            $data['units'] = $request->units;
+            $data['price'] = $request->price;
+            $product = Product::create($data);
         
         return response()->json([
             'status' => (bool) $product,
@@ -33,9 +60,9 @@ class ProductController extends Controller
     public function show($id)
     {
         logger($id);
-        $products = Product::where('category_id', $id)->get();
+        $products = Product::where('category_id', $id)->with('category')->get();
         logger($products);
-        // return response()->json($product,200); 
+        return response()->json($products,200); 
     }
 
     public function uploadFile(Request $request)

@@ -10,7 +10,7 @@ import App from './views/App'
 import Home from './views/Home'
 import Login from './views/Login'
 import Register from './views/Register'
-import SingleProduct from './views/SingleProduct'
+import CategoryWiseProducts from './views/CategoryWiseProducts'
 import Checkout from './views/Checkout'
 import Confirmation from './views/Confirmation'
 import UserBoard from './views/UserBoard'
@@ -35,9 +35,9 @@ const router = new VueRouter({
             component: Register
         },
         {
-            path: '/products/:id',
-            name: 'single-products',
-            component: SingleProduct
+            path: '/products/category=:id',
+            name: 'productsByCategory',
+            component: CategoryWiseProducts
         },
         {
             path: '/confirmation',

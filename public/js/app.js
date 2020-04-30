@@ -804,8 +804,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__views_Login___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__views_Login__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__views_Register__ = __webpack_require__(39);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__views_Register___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__views_Register__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__views_SingleProduct__ = __webpack_require__(42);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__views_SingleProduct___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7__views_SingleProduct__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__views_CategoryWiseProducts__ = __webpack_require__(42);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__views_CategoryWiseProducts___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7__views_CategoryWiseProducts__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__views_Checkout__ = __webpack_require__(47);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__views_Checkout___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8__views_Checkout__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__views_Confirmation__ = __webpack_require__(52);
@@ -847,9 +847,9 @@ var router = new __WEBPACK_IMPORTED_MODULE_1_vue_router__["a" /* default */]({
         name: 'register',
         component: __WEBPACK_IMPORTED_MODULE_6__views_Register___default.a
     }, {
-        path: '/products/:id',
-        name: 'single-products',
-        component: __WEBPACK_IMPORTED_MODULE_7__views_SingleProduct___default.a
+        path: '/products/category=:id',
+        name: 'productsByCategory',
+        component: __WEBPACK_IMPORTED_MODULE_7__views_CategoryWiseProducts___default.a
     }, {
         path: '/confirmation',
         name: 'confirmation',
@@ -58199,7 +58199,7 @@ exports = module.exports = __webpack_require__(2)(false);
 
 
 // module
-exports.push([module.i, "\n.main[data-v-6c0a33b2]{\n    width: 40%;\n    background-color: rgb(255,227,63);\n    // text-align: center !important;\n     margin-right: auto !important;\n     margin-left: auto !important;\n     padding-left: 5px;\n     padding-right: 5px;\n}\n@media only screen and (max-width: 700px) {\n.main[data-v-6c0a33b2]{   \n       width: 100%;\n       padding-left: 8px;\n       padding-right: 8px;\n}\n}\n", ""]);
+exports.push([module.i, "\n.main[data-v-6c0a33b2]{\n    width: 40%;\n    background-color: rgb(26,85,156);\n    // text-align: center !important;\n     margin-right: auto !important;\n     margin-left: auto !important;\n     padding-left: 5px;\n     padding-right: 5px;\n}\n@media only screen and (max-width: 700px) {\n.main[data-v-6c0a33b2]{   \n       width: 100%;\n       padding-left: 8px;\n       padding-right: 8px;\n}\n}\n", ""]);
 
 // exports
 
@@ -58286,25 +58286,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
         return {
-            categories: [],
-            cards: [{ title: 'Baby Food', src: '/images/Baby.png', flex: 6 }, { title: 'Health', src: '/images/Health-Hygiene.png', flex: 6 }, { title: 'Chocolate', src: '/images/Chocolates-Product-Category-10-1.png', flex: 6 }, { title: 'Electronics', src: '/images/Electronics-Product-Category.png', flex: 6 }]
+            categories: []
         };
     },
     beforeMount: function beforeMount() {
         var _this = this;
 
         axios.get('/api/').then(function (response) {
-            console.log(response.data);
+            console.log(response.data[0].imgUrl);
             _this.categories = response.data;
         }).catch(function (error) {
             console.error(error);
@@ -58313,13 +58306,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     methods: {
         selectedCategory: function selectedCategory(item) {
-            console.log(item);
-            axios.get('/api/products/category=' + item.id).then(function (response) {
-                // console.log(response.data)
-                // this.categories = response.data
-            }).catch(function (error) {
-                console.error(error);
-            });
+            this.$router.push({ path: "/products/category=" + item.id });
         }
     }
 
@@ -58354,10 +58341,14 @@ var render = function() {
             _c(
               "v-row",
               { attrs: { dense: "" } },
-              _vm._l(_vm.cards, function(card) {
+              _vm._l(_vm.categories, function(card) {
                 return _c(
                   "v-col",
-                  { key: card.name, class: "d-flex justify-center mb-3" },
+                  {
+                    key: card.name,
+                    class: "d-flex justify-center mb-3",
+                    attrs: { cols: "6" }
+                  },
                   [
                     _c(
                       "v-card",
@@ -58372,7 +58363,7 @@ var render = function() {
                       },
                       [
                         _c("v-img", {
-                          attrs: { src: card.src, height: "180px" }
+                          attrs: { src: card.imgUrl, height: "180px" }
                         }),
                         _vm._v(" "),
                         _c(
@@ -58380,7 +58371,7 @@ var render = function() {
                           { staticClass: "justify-center" },
                           [
                             _c("p", { staticStyle: { "font-size": "20px" } }, [
-                              _vm._v(_vm._s(card.title))
+                              _vm._v(_vm._s(card.name))
                             ])
                           ]
                         )
@@ -59050,7 +59041,7 @@ var __vue_template_functional__ = false
 /* styles */
 var __vue_styles__ = injectStyle
 /* scopeId */
-var __vue_scopeId__ = "data-v-25288544"
+var __vue_scopeId__ = "data-v-065ce399"
 /* moduleIdentifier (server only) */
 var __vue_module_identifier__ = null
 var Component = normalizeComponent(
@@ -59061,7 +59052,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources/assets/js/views/SingleProduct.vue"
+Component.options.__file = "resources/assets/js/views/CategoryWiseProducts.vue"
 
 /* hot reload */
 if (false) {(function () {
@@ -59070,9 +59061,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-25288544", Component.options)
+    hotAPI.createRecord("data-v-065ce399", Component.options)
   } else {
-    hotAPI.reload("data-v-25288544", Component.options)
+    hotAPI.reload("data-v-065ce399", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -59093,13 +59084,13 @@ var content = __webpack_require__(44);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(3)("351a3974", content, false, {});
+var update = __webpack_require__(3)("552df600", content, false, {});
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
  if(!content.locals) {
-   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-25288544\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./SingleProduct.vue", function() {
-     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-25288544\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./SingleProduct.vue");
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-065ce399\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./CategoryWiseProducts.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-065ce399\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./CategoryWiseProducts.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -59117,7 +59108,7 @@ exports = module.exports = __webpack_require__(2)(false);
 
 
 // module
-exports.push([module.i, "\n.small-text[data-v-25288544] {\n    font-size: 18px;\n}\n.title[data-v-25288544] {\n    font-size: 36px;\n}\n", ""]);
+exports.push([module.i, "\n.main[data-v-065ce399]{\n    width: 40%;\n    background-color: rgb(26,85,156);\n    // text-align: center !important;\n     margin-right: auto !important;\n     margin-left: auto !important;\n     padding-left: 5px;\n     padding-right: 5px;\n}\n.logo[data-v-065ce399]{\n    margin-left: 27px;\n}\n.homebtn[data-v-065ce399]{\n    margin-left: 30px;\n}\n@media only screen and (max-width: 700px) {\n.main[data-v-065ce399]{   \n       width: 100%;\n       padding-left: 8px;\n       padding-right: 8px;\n}\n.logo[data-v-065ce399]{\n        margin-left: 10px;\n}\n.homebtn[data-v-065ce399]{\n        margin-left: 0px;\n}\n}\n", ""]);
 
 // exports
 
@@ -59146,21 +59137,90 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
         return {
-            product: []
+            products: [],
+            product_qty: 1
         };
     },
     beforeMount: function beforeMount() {
         var _this = this;
 
-        axios.get("/api/products/" + this.$route.params.id).then(function (response) {
+        axios.get('/api/products/category=' + this.$route.params.id).then(function (response) {
+            console.log(response.data);
+            _this.products = response.data;
+        }).catch(function (error) {
+            console.error(error);
+        });
+        axios.get('/api/products/' + this.$route.params.id).then(function (response) {
             _this.product = response.data;
         }).catch(function (error) {
             console.error(error);
         });
+    },
+
+    methods: {
+        gotoHome: function gotoHome() {
+            this.$router.push({ path: '/' });
+        }
     }
 });
 
@@ -59172,51 +59232,140 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "container" }, [
-    _c("div", { staticClass: "row" }, [
-      _c(
-        "div",
-        { staticClass: "col-md-8 offset-md-2" },
-        [
-          _c("img", {
-            attrs: { src: _vm.product.image, alt: _vm.product.name }
-          }),
-          _vm._v(" "),
-          _c("h3", {
-            staticClass: "title",
-            domProps: { innerHTML: _vm._s(_vm.product.name) }
-          }),
-          _vm._v(" "),
-          _c("p", { staticClass: "text-muted" }, [
-            _vm._v(_vm._s(_vm.product.description))
-          ]),
-          _vm._v(" "),
-          _c("h4", [
-            _c("span", { staticClass: "small-text text-muted float-left" }, [
-              _vm._v("$ " + _vm._s(_vm.product.price))
-            ]),
+  return _c("v-app", [
+    _c(
+      "div",
+      { staticClass: "main" },
+      [
+        _c(
+          "v-container",
+          { attrs: { fluid: "" } },
+          [
+            _c(
+              "v-row",
+              [
+                _c("v-col", { attrs: { cols: "4", sm: "4" } }, [
+                  _c(
+                    "div",
+                    { staticClass: "logo" },
+                    [_c("v-btn", [_vm._v("logo")])],
+                    1
+                  )
+                ]),
+                _vm._v(" "),
+                _c("v-col", { attrs: { cols: "5", sm: "5" } }),
+                _vm._v(" "),
+                _c("v-col", { attrs: { cols: "3", sm: "3" } }, [
+                  _c(
+                    "div",
+                    { staticClass: "homebtn" },
+                    [
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: {
+                            icon: "",
+                            color: "white",
+                            height: "50",
+                            width: "50"
+                          },
+                          on: { click: _vm.gotoHome }
+                        },
+                        [
+                          _c("v-icon", { attrs: { size: "30" } }, [
+                            _vm._v("mdi-home")
+                          ])
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ])
+              ],
+              1
+            ),
             _vm._v(" "),
-            _c("span", { staticClass: "small-text float-right" }, [
-              _vm._v("Available Quantity: " + _vm._s(_vm.product.units))
-            ])
-          ]),
-          _vm._v(" "),
-          _c("br"),
-          _vm._v(" "),
-          _c("hr"),
-          _vm._v(" "),
-          _c(
-            "router-link",
-            {
-              staticClass: "col-md-4 btn btn-sm btn-primary float-right",
-              attrs: { to: { path: "/checkout?pid=" + _vm.product.id } }
-            },
-            [_vm._v("Buy Now")]
-          )
-        ],
-        1
-      )
-    ])
+            _c("v-text-field", {
+              staticClass: "pa-3 ma-2",
+              attrs: {
+                solo: "",
+                label: "Search Here",
+                "append-icon": "mdi-magnify"
+              }
+            }),
+            _vm._v(" "),
+            _c(
+              "v-row",
+              { attrs: { dense: "" } },
+              _vm._l(_vm.products, function(card) {
+                return _c(
+                  "v-col",
+                  {
+                    key: card.name,
+                    class: "d-flex justify-center mb-3",
+                    attrs: { cols: "6" }
+                  },
+                  [
+                    _c(
+                      "v-card",
+                      { staticClass: "mx-auto", attrs: { width: "200px" } },
+                      [
+                        _c("v-img", {
+                          attrs: {
+                            src: "/images/" + card.image,
+                            height: "180px"
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("v-card-title", {
+                          domProps: { textContent: _vm._s(card.name) }
+                        }),
+                        _vm._v(" "),
+                        _c("v-card-subtitle", { staticClass: "pb-0" }, [
+                          _vm._v(_vm._s(card.category.name))
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "v-card-actions",
+                          { staticClass: "justify-center" },
+                          [
+                            _c(
+                              "v-btn",
+                              {
+                                attrs: {
+                                  depressed: "",
+                                  color: "primary",
+                                  width: "170"
+                                }
+                              },
+                              [
+                                _c("span", [_vm._v("Buy")]),
+                                _vm._v(" "),
+                                _c("v-spacer"),
+                                _vm._v(" "),
+                                _c("span", [_vm._v("৳ " + _vm._s(card.price))])
+                              ],
+                              1
+                            )
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    )
+                  ],
+                  1
+                )
+              }),
+              1
+            )
+          ],
+          1
+        )
+      ],
+      1
+    )
   ])
 }
 var staticRenderFns = []
@@ -59225,7 +59374,7 @@ module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-25288544", module.exports)
+    require("vue-hot-reload-api")      .rerender("data-v-065ce399", module.exports)
   }
 }
 
@@ -60913,6 +61062,27 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -60925,15 +61095,19 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
                 units: null,
                 price: null,
                 category_id: null,
-                description: ""
+                description: "",
+                image: ""
             },
             defaultItem: {
                 name: "",
                 units: null,
                 price: null,
                 category_id: null,
-                description: ""
+                description: "",
+                image: ""
             },
+            imageUrl: "",
+            image: null,
             addingProduct: null,
             dialog: false,
             editedIndex: -1,
@@ -60976,6 +61150,44 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
                 console.error(error);
             });
         },
+        onPickFile: function onPickFile() {
+            this.$refs.fileInput.click();
+        },
+        onFilePicked: function onFilePicked(event) {
+            var _this3 = this;
+
+            var files = event.target.files;
+            var filename = files[0].name;
+            if (filename.lastIndexOf(".") <= 0) {
+                return alert("Please add a valid file!");
+            }
+            var fileReader = new FileReader();
+
+            fileReader.readAsDataURL(event.target.files[0]);
+            //Initiate the JavaScript Image object.
+            var image = new Image();
+
+            //Set the Base64 string return from FileReader as source.
+            image.src = event.target.result;
+
+            //Declare Variables
+            var height = 0;
+            var width = 0;
+
+            //Validate the File Height and Width.
+            image.onload = function () {
+                height = this.height;
+                width = this.width;
+            };
+            // if (height >= 100 || width >= 300) {
+            //     return alert("Height and Width must not exceed 100*300 px");
+            // } else {
+            fileReader.onload = function (event) {
+                _this3.editedItem.image = event.target.result;
+                _this3.imageUrl = fileReader.result;
+            };
+            // }
+        },
         newProduct: function newProduct() {
             this.addingProduct = {
                 name: null,
@@ -60986,7 +61198,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
             };
         },
         endEditing: function endEditing(product) {
-            var _this3 = this;
+            var _this4 = this;
 
             this.editedItem = null;
             var index = this.products.indexOf(product);
@@ -60996,11 +61208,11 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
                 price: product.price,
                 description: product.description
             }).then(function (response) {
-                _this3.products[index] = product;
+                _this4.products[index] = product;
             }).catch(function (response) {});
         },
         addProduct: function addProduct(product) {
-            var _this4 = this;
+            var _this5 = this;
 
             this.addingProduct = null;
             axios.post("/api/products/", {
@@ -61010,7 +61222,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
                 description: product.description,
                 image: product.image
             }).then(function (response) {
-                _this4.products.push(product);
+                _this5.products.push(product);
             }).catch(function (response) {});
         },
         editItem: function editItem(item) {
@@ -61021,17 +61233,17 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
             this.dialog = true;
         },
         close: function close() {
-            var _this5 = this;
+            var _this6 = this;
 
             this.dialog = false;
             setTimeout(function () {
-                _this5.editedItem = Object.assign({}, _this5.defaultItem);
-                _this5.editedIndex = -1;
+                _this6.editedItem = Object.assign({}, _this6.defaultItem);
+                _this6.editedIndex = -1;
             }, 300);
         },
         save: function () {
             var _ref = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee() {
-                var _this6 = this;
+                var _this7 = this;
 
                 return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee$(_context) {
                     while (1) {
@@ -61044,7 +61256,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 
                                 _context.next = 3;
                                 return axios.put("/api/products/" + this.editedItem.id, this.editedItem).then(function (response) {
-                                    Object.assign(_this6.products[_this6.editedIndex], _this6.editedItem);
+                                    Object.assign(_this7.products[_this7.editedIndex], _this7.editedItem);
                                 }).catch(function (response) {
                                     error;
                                 });
@@ -61058,7 +61270,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
                                 _context.next = 8;
                                 return axios.post("/api/products", this.editedItem).then(function (response) {
                                     console.log(response.data);
-                                    _this6.products.push(response.data.data);
+                                    _this7.products.push(response.data.data);
                                 }).catch(function (response) {
                                     error;
                                 });
@@ -62390,6 +62602,56 @@ var render = function() {
                               )
                             ],
                             1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-row",
+                            [
+                              _c(
+                                "v-col",
+                                { staticClass: "py-0", attrs: { cols: "12" } },
+                                [
+                                  _c(
+                                    "label",
+                                    [
+                                      _c(
+                                        "v-btn",
+                                        {
+                                          attrs: { raised: "" },
+                                          on: { click: _vm.onPickFile }
+                                        },
+                                        [_vm._v("Upload Image")]
+                                      ),
+                                      _vm._v(" "),
+                                      _c("input", {
+                                        ref: "fileInput",
+                                        staticStyle: { display: "none" },
+                                        attrs: {
+                                          type: "file",
+                                          id: "file",
+                                          accept: "image/*"
+                                        },
+                                        on: { change: _vm.onFilePicked }
+                                      })
+                                    ],
+                                    1
+                                  )
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _vm.imageUrl
+                                ? _c("v-col", { attrs: { cols: "12" } }, [
+                                    _c("img", {
+                                      attrs: {
+                                        src: _vm.imageUrl,
+                                        height: "150",
+                                        width: "150"
+                                      }
+                                    })
+                                  ])
+                                : _vm._e()
+                            ],
+                            1
                           )
                         ],
                         1
@@ -63313,6 +63575,23 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -63321,12 +63600,14 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
             categories: [],
             editedItem: {
                 name: "",
-                image: null
+                image: ""
             },
             defaultItem: {
                 name: "",
                 image: null
             },
+            imageUrl: "",
+            image: null,
             addingProduct: null,
             dialog: false,
             search: '',
@@ -63357,7 +63638,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
     },
     methods: {
         // endEditing(product){
-        //     this.editingItem = null
+
         //     let index = this.products.indexOf(product)
         //     axios.put(`/api/products/${product.id}`,{
         //         name  : product.name,
@@ -63388,6 +63669,44 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 
         //     })
         // },
+        onPickFile: function onPickFile() {
+            this.$refs.fileInput.click();
+        },
+        onFilePicked: function onFilePicked(event) {
+            var _this2 = this;
+
+            var files = event.target.files;
+            var filename = files[0].name;
+            if (filename.lastIndexOf(".") <= 0) {
+                return alert("Please add a valid file!");
+            }
+            var fileReader = new FileReader();
+
+            fileReader.readAsDataURL(event.target.files[0]);
+            //Initiate the JavaScript Image object.
+            var image = new Image();
+
+            //Set the Base64 string return from FileReader as source.
+            image.src = event.target.result;
+
+            //Declare Variables
+            var height = 0;
+            var width = 0;
+
+            //Validate the File Height and Width.
+            image.onload = function () {
+                height = this.height;
+                width = this.width;
+            };
+            // if (height >= 100 || width >= 300) {
+            //     return alert("Height and Width must not exceed 100*300 px");
+            // } else {
+            fileReader.onload = function (event) {
+                _this2.editedItem.image = event.target.result;
+                _this2.imageUrl = fileReader.result;
+            };
+            // }
+        },
         editItem: function editItem(item) {
             console.log(item);
             this.editedIndex = this.categories.indexOf(item);
@@ -63396,17 +63715,17 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
             this.dialog = true;
         },
         close: function close() {
-            var _this2 = this;
+            var _this3 = this;
 
             this.dialog = false;
             setTimeout(function () {
-                _this2.editedItem = Object.assign({}, _this2.defaultItem);
-                _this2.editedIndex = -1;
+                _this3.editedItem = Object.assign({}, _this3.defaultItem);
+                _this3.editedIndex = -1;
             }, 300);
         },
         save: function () {
             var _ref = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee() {
-                var _this3 = this;
+                var _this4 = this;
 
                 return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee$(_context) {
                     while (1) {
@@ -63419,28 +63738,29 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 
                                 _context.next = 3;
                                 return axios.put("/api/categories/" + this.editedItem.id, this.editedItem).then(function (response) {
-                                    Object.assign(_this3.categories[_this3.editedIndex], _this3.editedItem);
+                                    Object.assign(_this4.categories[_this4.editedIndex], _this4.editedItem);
                                 }).catch(function (response) {
                                     error;
                                 });
 
                             case 3:
-                                _context.next = 7;
+                                _context.next = 8;
                                 break;
 
                             case 5:
-                                _context.next = 7;
+                                console.log(this.editedItem);
+                                _context.next = 8;
                                 return axios.post("/api/categories", this.editedItem).then(function (response) {
                                     console.log(response.data);
-                                    _this3.categories.push(response.data);
+                                    _this4.categories.push(response.data);
                                 }).catch(function (response) {
                                     error;
                                 });
 
-                            case 7:
+                            case 8:
                                 this.close();
 
-                            case 8:
+                            case 9:
                             case "end":
                                 return _context.stop();
                         }
@@ -63568,7 +63888,7 @@ var render = function() {
                     [
                       _c(
                         "v-container",
-                        { staticClass: "py-0" },
+                        { staticClass: "py-0", attrs: { fluid: "" } },
                         [
                           _c(
                             "v-row",
@@ -63593,28 +63913,59 @@ var render = function() {
                                   })
                                 ],
                                 1
-                              ),
-                              _vm._v(" "),
+                              )
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-row",
+                            [
                               _c(
                                 "v-col",
-                                { staticClass: "py-0", attrs: { cols: "12" } },
+                                { staticClass: "py-0", attrs: { cols: "2" } },
                                 [
-                                  _c("v-file-input", {
-                                    attrs: {
-                                      "show-size": "",
-                                      label: "File input"
-                                    },
-                                    model: {
-                                      value: _vm.editedItem.image,
-                                      callback: function($$v) {
-                                        _vm.$set(_vm.editedItem, "image", $$v)
-                                      },
-                                      expression: "editedItem.image"
-                                    }
-                                  })
-                                ],
-                                1
-                              )
+                                  _c(
+                                    "label",
+                                    [
+                                      _c(
+                                        "v-btn",
+                                        {
+                                          attrs: { raised: "" },
+                                          on: { click: _vm.onPickFile }
+                                        },
+                                        [_vm._v("Upload Image")]
+                                      ),
+                                      _vm._v(" "),
+                                      _c("input", {
+                                        ref: "fileInput",
+                                        staticStyle: { display: "none" },
+                                        attrs: {
+                                          type: "file",
+                                          id: "file",
+                                          accept: "image/*"
+                                        },
+                                        on: { change: _vm.onFilePicked }
+                                      })
+                                    ],
+                                    1
+                                  )
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c("v-col", { attrs: { cols: "1" } }),
+                              _vm._v(" "),
+                              _vm.imageUrl
+                                ? _c("v-col", { attrs: { cols: "9" } }, [
+                                    _c("img", {
+                                      attrs: {
+                                        src: _vm.imageUrl,
+                                        height: "150",
+                                        width: "150"
+                                      }
+                                    })
+                                  ])
+                                : _vm._e()
                             ],
                             1
                           )

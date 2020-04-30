@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Category;
+use App\Product;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -16,6 +17,9 @@ class CategoryController extends Controller
     {
         $categories = Category::all();
         logger($categories);
+        foreach($categories as $category){
+            $category['imgUrl'] = '/images/'.$category->image;
+        }
 
         return response()->json($categories, 200);
     }
@@ -41,12 +45,32 @@ class CategoryController extends Controller
         // logger($request);
         $validatedData = $request->validate([
             'name' => 'required|max:190',
-            // 'image' => 'required'
+            'image' => 'required'
         ]);
-        $category = Category::create([
-            'name' => $request->name,
-            'image' => $request->image
-        ]);
+            $data = [];
+
+            if ($request->filled('image')) {
+                logger('has');
+                logger($request->all());
+                $exploded = explode(',', $request->image);
+                $decoded = base64_decode($exploded[1]);
+
+                if(str_contains($exploded[0], 'jpeg'))
+                    $extension = 'jpg';
+                else
+                    $extension = 'png';
+
+                $fileName = str_random().'.'.$extension;
+                
+                $path = public_path().'/images/'.$fileName;
+
+                file_put_contents($path, $decoded);
+
+                $data['image'] = $fileName;
+            }
+
+            $data['name'] = $request->name;
+        $category = Category::create($data);
 
         return response()->json($category, 200);
     }
@@ -100,7 +124,13 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        $category_delete = Category::find($category->id);
-        $category_delete->delete();
+        $isProduct = Product::where('category_id', $category->id)->count();
+        logger($isProduct);
+        if($isProduct == 0){
+            $category_delete = Category::find($category->id);
+            $category_delete->delete();
+        } else {
+            logger('not allowed');
+        }
     }
 }

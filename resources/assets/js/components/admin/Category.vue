@@ -14,13 +14,30 @@
                     </v-card-title>
                     <v-divider></v-divider>
                     <v-card-text class="py-0">
-                    <v-container class="py-0">
+                    <v-container fluid class="py-0">
                         <v-row>
                             <v-col cols="12" class="py-0">
                                 <v-text-field v-model="editedItem.name" label="Name*" outlined required></v-text-field>
                             </v-col>
-                            <v-col cols="12" class="py-0">
-                                <v-file-input v-model="editedItem.image" show-size label="File input"></v-file-input>
+                        </v-row>
+                        <v-row>
+                            <v-col cols="2" class="py-0">
+                                <!-- <v-file-input v-model="editedItem.image" @change="onFilePicked" show-size label="File input"></v-file-input> -->
+                                <label>
+                                    <v-btn raised @click="onPickFile">Upload Image</v-btn>
+                                    <input
+                                    type="file"
+                                    id="file"
+                                    ref="fileInput"
+                                    style="display:none"
+                                    accept="image/*"
+                                    @change="onFilePicked"
+                                    />
+                                </label>
+                            </v-col>
+                            <v-col cols="1"></v-col>
+                            <v-col cols="9" v-if="imageUrl">
+                                <img :src="imageUrl" height="150" width="150" />
                             </v-col>
                         </v-row>
                     </v-container>
@@ -94,12 +111,14 @@
                 categories : [],
                 editedItem: {
                     name: "",
-                    image: null
+                    image: ""
                 },
                 defaultItem: {
                     name: "",
                     image: null
                 },
+                imageUrl: "",
+                image: null,
                 addingProduct : null,
                 dialog: false,
                 search: '',
@@ -132,7 +151,7 @@
         },
         methods : {
             // endEditing(product){
-            //     this.editingItem = null
+
             //     let index = this.products.indexOf(product)
             //     axios.put(`/api/products/${product.id}`,{
             //         name  : product.name,
@@ -163,6 +182,42 @@
 
             //     })
             // },
+            onPickFile() {
+                this.$refs.fileInput.click();
+            },
+            onFilePicked(event) {
+            const files = event.target.files;
+            let filename = files[0].name;
+            if (filename.lastIndexOf(".") <= 0) {
+                return alert("Please add a valid file!");
+            }
+            var fileReader = new FileReader();
+
+            fileReader.readAsDataURL(event.target.files[0]);
+            //Initiate the JavaScript Image object.
+            var image = new Image();
+
+            //Set the Base64 string return from FileReader as source.
+            image.src = event.target.result;
+
+            //Declare Variables
+            var height = 0;
+            var width = 0;
+
+            //Validate the File Height and Width.
+            image.onload = function() {
+                height = this.height;
+                width = this.width;
+            };
+            // if (height >= 100 || width >= 300) {
+            //     return alert("Height and Width must not exceed 100*300 px");
+            // } else {
+                fileReader.onload = event => {
+                this.editedItem.image = event.target.result;
+                this.imageUrl = fileReader.result;
+                };
+            // }
+            },
             editItem(item) {
                 console.log(item);
                 this.editedIndex = this.categories.indexOf(item);
@@ -186,6 +241,7 @@
                     .catch(response => { error })
                 }
                 else {
+                    console.log(this.editedItem);
                     await axios.post("/api/categories", this.editedItem)
                     .then(response => {
                         console.log(response.data);
